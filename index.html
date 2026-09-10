@@ -663,7 +663,8 @@
     <section class="gallery-wrap">
       <div class="gallery-head">
         <h2>Sepotong Kenangan</h2>
-        <p>Geser bola kenangan atau ketuk salah satu foto untuk memperbesar</p>
+        <!-- Teks ini yang nanti akan berganti otomatis saat foto selesai dimuat -->
+        <p id="loading-text">Memuat kenangan (0%)... ✨</p>
       </div>
       <div id="globe-container"></div>
     </section>
@@ -797,13 +798,14 @@
         }
       });
 
-      /* ---------- THREE.JS 3D GLOBE (MOBILE RESPONSIVE) ---------- */
+      /* ---------- THREE.JS 3D GLOBE (WITH LOADING PROGRESS) ---------- */
       const photoUrls = Array.from({ length: 46 }, (_, i) => {
         const num = String(i + 1).padStart(2, "0");
         return `assets/gallery/foto-${num}.jpg`;
       });
 
       const container = document.getElementById("globe-container");
+      const loadingText = document.getElementById("loading-text");
       const scene = new THREE.Scene();
 
       const camera = new THREE.PerspectiveCamera(
@@ -813,7 +815,6 @@
         1000,
       );
 
-      // Mengatur jarak kamera awal berdasarkan lebar layar HP
       function updateCameraDistance() {
         const isMobile = window.innerWidth <= 768;
         camera.position.z = isMobile ? 320 : 280;
@@ -838,6 +839,7 @@
       const phiRatio = (1 + Math.sqrt(5)) / 2;
 
       const meshes = [];
+      let loadedCount = 0; // Menghitung berapa foto yang sudah selesai dimuat
 
       photoUrls.forEach((url, i) => {
         textureLoader.load(url, (texture) => {
@@ -864,10 +866,25 @@
           mesh.userData = { url: url };
           meshes.push(mesh);
           globeGroup.add(mesh);
+
+          // --- BAGIAN HITUNG LOADING ---
+          loadedCount++;
+          const percent = Math.round((loadedCount / count) * 100);
+
+          if (loadingText) {
+            if (loadedCount < count) {
+              // Tampilkan persentase saat masih proses memuat
+              loadingText.innerText = `Memuat kenangan (${percent}%)... ✨`;
+            } else {
+              // Tampilkan petunjuk ini setelah 100% (46 foto terunduh semua)
+              loadingText.innerText =
+                "Geser bola kenangan atau ketuk salah satu foto untuk memperbesar";
+            }
+          }
         });
       });
 
-      /* Interaksi Touch & Click */
+      /* Interaksi Drag & Touch */
       let isDragging = false;
       let startX = 0,
         startY = 0;
@@ -896,7 +913,6 @@
         const deltaX = clientX - previousMousePosition.x;
         const deltaY = clientY - previousMousePosition.y;
 
-        // Kontrol sensitivitas geseran pada HP
         const sensitivity = window.innerWidth <= 768 ? 0.006 : 0.005;
 
         dragVelocity.x = deltaY * sensitivity;
@@ -978,7 +994,6 @@
       }
       animate();
 
-      // Responsif Saat Layar Direse
       window.addEventListener("resize", () => {
         updateCameraDistance();
         camera.aspect = container.clientWidth / container.clientHeight;
