@@ -165,16 +165,16 @@
         color: var(--rose);
       }
 
-      /* GALLERY WRAPPER - RESPONSIVE OPTIMIZATION */
+      /* GALLERY SECTION */
       .gallery-wrap {
         background: var(--bg-deep);
-        padding: 4rem 1rem;
+        padding: 5rem 1rem;
         overflow: hidden;
       }
 
       .gallery-head {
         max-width: 620px;
-        margin: 0 auto 1rem;
+        margin: 0 auto 2rem;
         text-align: center;
       }
 
@@ -187,46 +187,125 @@
       .gallery-head p {
         margin-top: 0.5rem;
         color: rgba(47, 28, 34, 0.62);
-        font-size: 0.92rem;
-        padding: 0 1rem;
+        font-size: 0.95rem;
       }
 
-      /* 3D GLOBE CONTAINER RESPONSIVE */
-      #globe-container {
-        width: 100%;
-        height: 600px;
+      /* PHOTOBOX SLIDESHOW CAROUSEL */
+      .photobox-slider {
+        max-width: 460px;
+        margin: 0 auto;
         position: relative;
-        cursor: grab;
-        touch-action: none;
+        user-select: none;
       }
 
-      #globe-container:active {
-        cursor: grabbing;
+      .photobox-frame {
+        background: #ffffff;
+        padding: 16px 16px 24px;
+        border-radius: 4px;
+        box-shadow: 0 12px 35px rgba(47, 28, 34, 0.15);
+        border: 1px solid rgba(47, 28, 34, 0.08);
+        transform: rotate(-1deg);
+        transition: transform 0.3s ease;
       }
 
-      /* Responsif HP */
-      @media (max-width: 768px) {
-        .gallery-wrap {
-          padding: 3rem 0.5rem;
-        }
-
-        #globe-container {
-          height: 440px; /* Ukuran pas untuk layar HP */
-        }
+      .photobox-frame:hover {
+        transform: rotate(0deg) scale(1.01);
       }
 
-      @media (max-width: 480px) {
-        #globe-container {
-          height: 380px; /* HP berlayar kecil */
-        }
+      .viewport {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        position: relative;
+        background: #f0f0f0;
+        border-radius: 2px;
+        cursor: pointer;
       }
 
-      /* POPUP MODAL FOTO MEMBESAR */
+      .slide-track {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      .slide {
+        min-width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .frame-footer {
+        margin-top: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 4px;
+      }
+
+      .frame-caption {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-size: 0.95rem;
+        color: var(--rose);
+      }
+
+      .frame-counter {
+        font-size: 0.82rem;
+        color: rgba(47, 28, 34, 0.5);
+        letter-spacing: 0.05em;
+      }
+
+      /* CONTROLS */
+      .slider-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.2rem;
+        margin-top: 1.8rem;
+      }
+
+      .ctrl-btn {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1rem;
+      }
+
+      .ctrl-btn:hover {
+        border-color: var(--rose);
+        color: var(--rose);
+        transform: scale(1.05);
+      }
+
+      .play-pause-btn {
+        font-size: 0.85rem;
+        padding: 0 1rem;
+        width: auto;
+        border-radius: 20px;
+      }
+
+      /* MODAL ZOOM */
       .photo-modal {
         position: fixed;
         inset: 0;
         z-index: 50;
-        background: rgba(47, 28, 34, 0.75);
+        background: rgba(47, 28, 34, 0.8);
         backdrop-filter: blur(8px);
         display: flex;
         align-items: center;
@@ -243,14 +322,13 @@
       }
 
       .photo-modal-content {
-        position: relative;
         max-width: 92vw;
         max-height: 85vh;
         background: #fff;
-        padding: 10px 10px 16px;
+        padding: 12px 12px 18px;
         border-radius: 6px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        transform: scale(0.85);
+        transform: scale(0.88);
         transition: transform 0.35s ease;
         display: flex;
         flex-direction: column;
@@ -263,7 +341,7 @@
 
       .photo-modal img {
         max-width: 100%;
-        max-height: 70vh;
+        max-height: 72vh;
         object-fit: contain;
         border-radius: 3px;
       }
@@ -273,11 +351,10 @@
         background: none;
         border: none;
         font-family: "Work Sans", sans-serif;
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         color: var(--rose);
         cursor: pointer;
         font-weight: 500;
-        padding: 4px 12px;
       }
 
       /* FOOTER */
@@ -534,7 +611,6 @@
         }
       }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
   <body>
     <audio autoplay loop muted>
@@ -660,13 +736,32 @@
       <p class="signoff">Selamat ulang tahun, Ayunisa. 🤍</p>
     </section>
 
+    <!-- PHOTOBOX SLIDESHOW SECTION -->
     <section class="gallery-wrap">
       <div class="gallery-head">
         <h2>Sepotong Kenangan</h2>
-        <!-- Teks ini yang nanti akan berganti otomatis saat foto selesai dimuat -->
-        <p id="loading-text">Memuat kenangan (0%)... ✨</p>
+        <p>Geser atau tekan tombol untuk melihat kenangan foto</p>
       </div>
-      <div id="globe-container"></div>
+
+      <div class="photobox-slider">
+        <div class="photobox-frame">
+          <div class="viewport" id="sliderViewport">
+            <div class="slide-track" id="slideTrack">
+              <!-- 46 slide dibuat via JavaScript -->
+            </div>
+          </div>
+          <div class="frame-footer">
+            <span class="frame-caption">momen indah 🤍</span>
+            <span class="frame-counter" id="counterText">1 / 46</span>
+          </div>
+        </div>
+
+        <div class="slider-controls">
+          <button class="ctrl-btn" id="prevBtn" aria-label="Foto Sebelumnya">❮</button>
+          <button class="ctrl-btn play-pause-btn" id="playPauseBtn">Pause ❚❚</button>
+          <button class="ctrl-btn" id="nextBtn" aria-label="Foto Selanjutnya">❯</button>
+        </div>
+      </div>
     </section>
 
     <section class="footer">
@@ -798,208 +893,125 @@
         }
       });
 
-      /* ---------- THREE.JS 3D GLOBE (WITH LOADING PROGRESS) ---------- */
-      const photoUrls = Array.from({ length: 46 }, (_, i) => {
+      /* ---------- PHOTOBOX SLIDESHOW SYSTEM ---------- */
+      const totalPhotos = 46;
+      const slideTrack = document.getElementById("slideTrack");
+      const counterText = document.getElementById("counterText");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const playPauseBtn = document.getElementById("playPauseBtn");
+      const viewport = document.getElementById("sliderViewport");
+
+      const photoUrls = Array.from({ length: totalPhotos }, (_, i) => {
         const num = String(i + 1).padStart(2, "0");
         return `assets/gallery/foto-${num}.jpg`;
       });
 
-      const container = document.getElementById("globe-container");
-      const loadingText = document.getElementById("loading-text");
-      const scene = new THREE.Scene();
-
-      const camera = new THREE.PerspectiveCamera(
-        60,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        1000,
-      );
-
-      function updateCameraDistance() {
-        const isMobile = window.innerWidth <= 768;
-        camera.position.z = isMobile ? 320 : 280;
-      }
-      updateCameraDistance();
-
-      const renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: true,
-      });
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
-
-      const globeGroup = new THREE.Group();
-      scene.add(globeGroup);
-
-      const count = photoUrls.length;
-      const radius = 130;
-      const textureLoader = new THREE.TextureLoader();
-      const planeGeometry = new THREE.PlaneGeometry(28, 36);
-      const phiRatio = (1 + Math.sqrt(5)) / 2;
-
-      const meshes = [];
-      let loadedCount = 0; // Menghitung berapa foto yang sudah selesai dimuat
-
+      // Generate Slide Items
       photoUrls.forEach((url, i) => {
-        textureLoader.load(url, (texture) => {
-          texture.generateMipmaps = true;
-          texture.minFilter = THREE.LinearMipmapLinearFilter;
-
-          const material = new THREE.MeshBasicMaterial({
-            map: texture,
-            side: THREE.DoubleSide,
-          });
-
-          const mesh = new THREE.Mesh(planeGeometry, material);
-
-          const y = 1 - (i / (count - 1)) * 2;
-          const radiusAtY = Math.sqrt(1 - y * y);
-          const theta = (2 * Math.PI * i) / phiRatio;
-
-          const x = Math.cos(theta) * radiusAtY;
-          const z = Math.sin(theta) * radiusAtY;
-
-          mesh.position.set(x * radius, y * radius, z * radius);
-          mesh.lookAt(x * radius * 2, y * radius * 2, z * radius * 2);
-
-          mesh.userData = { url: url };
-          meshes.push(mesh);
-          globeGroup.add(mesh);
-
-          // --- BAGIAN HITUNG LOADING ---
-          loadedCount++;
-          const percent = Math.round((loadedCount / count) * 100);
-
-          if (loadingText) {
-            if (loadedCount < count) {
-              // Tampilkan persentase saat masih proses memuat
-              loadingText.innerText = `Memuat kenangan (${percent}%)... ✨`;
-            } else {
-              // Tampilkan petunjuk ini setelah 100% (46 foto terunduh semua)
-              loadingText.innerText =
-                "Geser bola kenangan atau ketuk salah satu foto untuk memperbesar";
-            }
-          }
-        });
+        const slide = document.createElement("div");
+        slide.className = "slide";
+        slide.innerHTML = `<img src="${url}" alt="Kenangan ${i + 1}" loading="lazy" />`;
+        slideTrack.appendChild(slide);
       });
 
-      /* Interaksi Drag & Touch */
-      let isDragging = false;
-      let startX = 0,
-        startY = 0;
-      let previousMousePosition = { x: 0, y: 0 };
-      let rotationSpeed = { x: 0, y: 0.0025 };
-      let dragVelocity = { x: 0, y: 0 };
+      let currentIndex = 0;
+      let autoPlayTimer = null;
+      let isPlaying = true;
 
-      const raycaster = new THREE.Raycaster();
-      const mouse = new THREE.Vector2();
-
-      function onPointerDown(e) {
-        isDragging = true;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        startX = clientX;
-        startY = clientY;
-        previousMousePosition = { x: clientX, y: clientY };
+      function updateSlide() {
+        slideTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+        counterText.innerText = `${currentIndex + 1} / ${totalPhotos}`;
       }
 
-      function onPointerMove(e) {
-        if (!isDragging) return;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        const deltaX = clientX - previousMousePosition.x;
-        const deltaY = clientY - previousMousePosition.y;
-
-        const sensitivity = window.innerWidth <= 768 ? 0.006 : 0.005;
-
-        dragVelocity.x = deltaY * sensitivity;
-        dragVelocity.y = deltaX * sensitivity;
-
-        globeGroup.rotation.x += dragVelocity.x;
-        globeGroup.rotation.y += dragVelocity.y;
-
-        previousMousePosition = { x: clientX, y: clientY };
+      function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalPhotos;
+        updateSlide();
       }
 
+      function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalPhotos) % totalPhotos;
+        updateSlide();
+      }
+
+      function startAutoPlay() {
+        if (autoPlayTimer) clearInterval(autoPlayTimer);
+        autoPlayTimer = setInterval(nextSlide, 3200); // Otomatis bergeser tiap 3.2 detik
+        isPlaying = true;
+        playPauseBtn.innerText = "Pause ❚❚";
+      }
+
+      function stopAutoPlay() {
+        if (autoPlayTimer) clearInterval(autoPlayTimer);
+        isPlaying = false;
+        playPauseBtn.innerText = "Play ▶";
+      }
+
+      playPauseBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          stopAutoPlay();
+        } else {
+          startAutoPlay();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        nextSlide();
+        if (isPlaying) startAutoPlay(); // reset timer
+      });
+
+      prevBtn.addEventListener("click", () => {
+        prevSlide();
+        if (isPlaying) startAutoPlay();
+      });
+
+      /* Touch Swipe Support for Mobile */
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      viewport.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      viewport.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+
+      function handleSwipe() {
+        const swipeDistance = touchEndX - touchStartX;
+        if (Math.abs(swipeDistance) > 40) {
+          if (swipeDistance < 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+          if (isPlaying) startAutoPlay();
+        }
+      }
+
+      /* Zoom Modal Functionality */
       const photoModal = document.getElementById("photoModal");
       const modalImg = document.getElementById("modalImg");
       const modalClose = document.getElementById("modalClose");
 
-      function openModal(url) {
-        modalImg.src = url;
+      viewport.addEventListener("click", (e) => {
+        // Mencegah trigger zoom jika melakukan swipe
+        if (Math.abs(touchEndX - touchStartX) > 10 && touchEndX !== 0) return;
+        modalImg.src = photoUrls[currentIndex];
         photoModal.classList.add("show");
-      }
+      });
 
-      function closeModal() {
+      modalClose.addEventListener("click", () => {
         photoModal.classList.remove("show");
-      }
+      });
 
-      modalClose.addEventListener("click", closeModal);
       photoModal.addEventListener("click", (e) => {
-        if (e.target === photoModal) closeModal();
+        if (e.target === photoModal) photoModal.classList.remove("show");
       });
 
-      function onPointerUp(e) {
-        if (!isDragging) return;
-        isDragging = false;
-
-        const clientX = e.changedTouches
-          ? e.changedTouches[0].clientX
-          : e.clientX;
-        const clientY = e.changedTouches
-          ? e.changedTouches[0].clientY
-          : e.clientY;
-
-        const moveDist = Math.hypot(clientX - startX, clientY - startY);
-        if (moveDist < 8) {
-          const rect = container.getBoundingClientRect();
-          mouse.x = ((clientX - rect.left) / container.clientWidth) * 2 - 1;
-          mouse.y = -((clientY - rect.top) / container.clientHeight) * 2 + 1;
-
-          raycaster.setFromCamera(mouse, camera);
-          const intersects = raycaster.intersectObjects(meshes);
-
-          if (intersects.length > 0) {
-            const clickedMesh = intersects[0].object;
-            openModal(clickedMesh.userData.url);
-          }
-        }
-      }
-
-      container.addEventListener("mousedown", onPointerDown);
-      window.addEventListener("mousemove", onPointerMove);
-      window.addEventListener("mouseup", onPointerUp);
-
-      container.addEventListener("touchstart", onPointerDown, {
-        passive: true,
-      });
-      window.addEventListener("touchmove", onPointerMove, { passive: true });
-      window.addEventListener("touchend", onPointerUp);
-
-      function animate() {
-        requestAnimationFrame(animate);
-
-        if (!isDragging) {
-          dragVelocity.x *= 0.95;
-          dragVelocity.y *= 0.95;
-
-          globeGroup.rotation.x += dragVelocity.x;
-          globeGroup.rotation.y += dragVelocity.y + rotationSpeed.y;
-        }
-
-        renderer.render(scene, camera);
-      }
-      animate();
-
-      window.addEventListener("resize", () => {
-        updateCameraDistance();
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-      });
+      // Jalankan Auto-play pertama kali
+      startAutoPlay();
     </script>
   </body>
 </html>
